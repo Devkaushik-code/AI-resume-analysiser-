@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Resume Results | ResumeAI</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/results.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <header class="navbar">
+
+        <div class="container nav-container">
+
+            <a href="index.html" class="logo">
+                <span class="logo-icon">R</span>
+
+                <span>
+                    Resume<span class="logo-highlight">AI</span>
+                </span>
+            </a>
+
+            <nav class="nav-links" id="navLinks">
+
+                <a href="index.html">Home</a>
+
+                <a href="index.html#features">
+                    Features
+                </a>
+
+                <a href="index.html#how-it-works">
+                    How It Works
+                </a>
+
+                <a href="login.html" class="nav-login">
+                    Login
+                </a>
+
+                <a href="analyzer.html" class="btn btn-primary btn-small">
+                    Analyze Resume
+                </a>
+
+            </nav>
+
+            <button
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Open menu"
+                aria-expanded="false"
+            >
+                ☰
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- RESULTS -->
+
+    <main class="results-section">
+
+        <div class="container">
+
+            <!-- HEADER -->
+
+            <div class="results-heading">
+
+                <span class="section-label">
+                    RESUME ANALYSIS
+                </span>
+
+                <h1>
+                    Your Resume
+                    <span class="gradient-text">
+                        Results
+                    </span>
+                </h1>
+
+                <p id="resumeName">
+                    Resume analysis completed.
+                </p>
+
+            </div>
+
+
+            <!-- SCORE CARD -->
+
+            <section class="score-card">
+
+                <div class="score-circle">
+
+                    <div class="score-number" id="overallScore">
+                        0
+                    </div>
+
+                    <span>
+                        / 100
+                    </span>
+
+                </div>
+
+                <div class="score-content">
+
+                    <span class="score-label">
+                        ATS SCORE
+                    </span>
+
+                    <h2 id="scoreTitle">
+                        Analyzing Resume
+                    </h2>
+
+                    <p id="scoreDescription">
+                        Your resume is being evaluated for
+                        ATS compatibility.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- CATEGORY SCORES -->
+
+            <section class="results-block">
+
+                <div class="block-heading">
+
+                    <span class="section-label">
+                        PERFORMANCE
+                    </span>
+
+                    <h2>
+                        Resume Breakdown
+                    </h2>
+
+                </div>
+
+
+                <div class="score-grid">
+
+                    <div class="score-item">
+
+                        <div class="score-item-top">
+                            <span>Contact Information</span>
+                            <strong id="contactScore">0%</strong>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-bar"
+                                id="contactBar"
+                            ></div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="score-item">
+
+                        <div class="score-item-top">
+                            <span>Skills</span>
+                            <strong id="skillsScore">0%</strong>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-bar"
+                                id="skillsBar"
+                            ></div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="score-item">
+
+                        <div class="score-item-top">
+                            <span>Experience</span>
+                            <strong id="experienceScore">0%</strong>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-bar"
+                                id="experienceBar"
+                            ></div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="score-item">
+
+                        <div class="score-item-top">
+                            <span>Education</span>
+                            <strong id="educationScore">0%</strong>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-bar"
+                                id="educationBar"
+                            ></div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="score-item">
+
+                        <div class="score-item-top">
+                            <span>Keywords</span>
+                            <strong id="keywordScore">0%</strong>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-bar"
+                                id="keywordBar"
+                            ></div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="score-item">
+
+                        <div class="score-item-top">
+                            <span>Resume Structure</span>
+                            <strong id="structureScore">0%</strong>
+                        </div>
+
+                        <div class="progress">
+                            <div
+                                class="progress-bar"
+                                id="structureBar"
+                            ></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- STRENGTHS + IMPROVEMENTS -->
+
+            <section class="insights-grid">
+
+
+                <!-- STRENGTHS -->
+
+                <div class="insight-card">
+
+                    <div class="insight-header">
+
+                        <div class="insight-icon">
+                            ✓
+                        </div>
+
+                        <div>
+                            <span class="section-label">
+                                POSITIVE
+                            </span>
+
+                            <h2>
+                                Strengths
+                            </h2>
+                        </div>
+
+                    </div>
+
+                    <ul id="strengthsList">
+                        <li>Analyzing your resume...</li>
+                    </ul>
+
+                </div>
+
+
+                <!-- IMPROVEMENTS -->
+
+                <div class="insight-card">
+
+                    <div class="insight-header">
+
+                        <div class="insight-icon improvement">
+                            !
+                        </div>
+
+                        <div>
+                            <span class="section-label">
+                                RECOMMENDATIONS
+                            </span>
+
+                            <h2>
+                                Improvements
+                            </h2>
+                        </div>
+
+                    </div>
+
+                    <ul id="improvementsList">
+                        <li>Analyzing your resume...</li>
+                    </ul>
+
+                </div>
+
+            </section>
+
+
+            <!-- KEYWORDS -->
+
+            <section class="keywords-card">
+
+                <div class="block-heading">
+
+                    <span class="section-label">
+                        ATS KEYWORDS
+                    </span>
+
+                    <h2>
+                        Recommended Skills & Keywords
+                    </h2>
+
+                    <p>
+                        Common keywords that can improve your
+                        resume's visibility in ATS systems.
+                    </p>
+
+                </div>
+
+                <div
+                    class="keyword-list"
+                    id="keywordList"
+                >
+                    <!-- JavaScript will add keywords -->
+                </div>
+
+            </section>
+
+
+            <!-- ACTIONS -->
+
+            <section class="results-actions">
+
+                <a
+                    href="analyzer.html"
+                    class="btn btn-primary"
+                >
+                    Analyze Another Resume
+                </a>
+
+                <a
+                    href="improve.html"
+                    class="btn btn-secondary"
+                >
+                    Improve My Resume
+                </a>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <div class="container">
+
+            <div class="footer-container">
+
+                <div class="footer-brand">
+
+                    <a href="index.html" class="logo">
+
+                        <span class="logo-icon">
+                            R
+                        </span>
+
+                        <span>
+                            Resume<span class="logo-highlight">
+                                AI
+                            </span>
+                        </span>
+
+                    </a>
+
+                    <p>
+                        AI-powered tools to help you build
+                        stronger resumes and move closer to
+                        your career goals.
+                    </p>
+
+                </div>
+
+
+                <div class="footer-links">
+
+                    <a href="index.html">
+                        Home
+                    </a>
+
+                    <a href="index.html#features">
+                        Features
+                    </a>
+
+                    <a href="index.html#how-it-works">
+                        How It Works
+                    </a>
+
+                    <a href="login.html">
+                        Login
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="footer-bottom">
+
+                <p>
+                    © 2026 ResumeAI. Built as an AI career project.
+                </p>
+
+                <span>
+                    Resume analysis made simpler.
+                </span>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <script src="js/app.js"></script>
+    <script src="js/results.js"></script>
+
+</body>
+
+</html>
