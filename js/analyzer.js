@@ -1,7 +1,4 @@
-/* =========================================================
-   RESUMEAI — ANALYZER JAVASCRIPT
-   STEP 2: FILE SELECTION & VALIDATION
-   ========================================================= */
+import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/6.3.289/pdf.min.mjs";
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -23,11 +20,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const allowedTypes = [
         "application/pdf",
-
-        "application/msword",
-
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
     ];
+
+
+    /* ================= CHOOSE RESUME ================= */
+
+    chooseResume.addEventListener("click", () => {
+        resumeFile.click();
+    });
 
 
     /* ================= FILE INPUT ================= */
@@ -37,28 +38,30 @@ document.addEventListener("DOMContentLoaded", () => {
         const file = resumeFile.files[0];
 
         if (!file) {
-            return;x
+            return;
         }
 
         validateFile(file);
 
     });
-  /* ================= CHOOSE RESUME ================= */
-
-chooseResume.addEventListener("click", () => {
-    resumeFile.click();
-});
 
 
     /* ================= VALIDATE FILE ================= */
 
     function validateFile(file) {
 
-        if (!allowedTypes.includes(file.type)) {
+        const extension = file.name
+            .split(".")
+            .pop()
+            .toLowerCase();
 
-            alert(
-                "Please upload a PDF, DOC, or DOCX resume."
-            );
+        const validExtension =
+            extension === "pdf" ||
+            extension === "docx";
+
+        if (!validExtension || !allowedTypes.includes(file.type)) {
+
+            alert("Please upload a PDF or DOCX resume.");
 
             resetFile();
 
@@ -68,9 +71,7 @@ chooseResume.addEventListener("click", () => {
 
         if (file.size > MAX_FILE_SIZE) {
 
-            alert(
-                "File size must be less than 5 MB."
-            );
+            alert("File size must be less than 5 MB.");
 
             resetFile();
 
@@ -89,27 +90,26 @@ chooseResume.addEventListener("click", () => {
 
         fileName.textContent = file.name;
 
-        fileSize.textContent = formatFileSize(file.size);
-
+        fileSize.textContent =
+            formatFileSize(file.size);
 
         selectedFile.hidden = false;
 
         uploadArea.style.display = "none";
 
-
         analyzeBtn.disabled = false;
 
-
         const extension =
-            file.name.split(".").pop().toUpperCase();
+            file.name
+                .split(".")
+                .pop()
+                .toUpperCase();
 
         const fileIcon =
             document.querySelector(".file-icon");
 
         if (fileIcon) {
-
             fileIcon.textContent = extension;
-
         }
 
     }
@@ -120,9 +120,7 @@ chooseResume.addEventListener("click", () => {
     function formatFileSize(bytes) {
 
         if (bytes < 1024) {
-
             return bytes + " Bytes";
-
         }
 
         if (bytes < 1024 * 1024) {
@@ -145,9 +143,7 @@ chooseResume.addEventListener("click", () => {
     /* ================= REMOVE FILE ================= */
 
     removeFile.addEventListener("click", () => {
-
         resetFile();
-
     });
 
 
@@ -168,108 +164,155 @@ chooseResume.addEventListener("click", () => {
 
     /* ================= DRAG & DROP ================= */
 
-    uploadArea.addEventListener(
-        "dragover",
-        (event) => {
+    uploadArea.addEventListener("dragover", (event) => {
 
-            event.preventDefault();
+        event.preventDefault();
 
-            uploadArea.classList.add("dragging");
+        uploadArea.classList.add("dragging");
+
+    });
+
+
+    uploadArea.addEventListener("dragleave", () => {
+
+        uploadArea.classList.remove("dragging");
+
+    });
+
+
+    uploadArea.addEventListener("drop", (event) => {
+
+        event.preventDefault();
+
+        uploadArea.classList.remove("dragging");
+
+        const file =
+            event.dataTransfer.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        try {
+
+            const dataTransfer =
+                new DataTransfer();
+
+            dataTransfer.items.add(file);
+
+            resumeFile.files =
+                dataTransfer.files;
+
+        } catch (error) {
+
+            console.log(
+                "Could not attach dropped file.",
+                error
+            );
 
         }
-    );
+
+        validateFile(file);
+
+    });
 
 
-    uploadArea.addEventListener(
-        "dragleave",
-        () => {
+    /* ================= ANALYZE ================= */
 
-            uploadArea.classList.remove("dragging");
-
-        }
-    );
-
-
-    uploadArea.addEventListener(
-        "drop",
-        (event) => {
-
-            event.preventDefault();
-
-            uploadArea.classList.remove("dragging");
-
-
-            const file =
-                event.dataTransfer.files[0];
-
-            if (!file) {
-                return;
-            }
-
-
-            /*
-             * Put dropped file into the file input
-             * so the rest of the application can
-             * use the same file.
-             */
-
-            try {
-
-                const dataTransfer =
-                    new DataTransfer();
-
-                dataTransfer.items.add(file);
-
-                resumeFile.files =
-                    dataTransfer.files;
-
-            } catch (error) {
-
-                console.log(
-                    "Could not attach dropped file.",
-                    error
-                );
-
-            }
-
-
-            validateFile(file);
-
-        }
-    );
-
-
-    /* ================= ANALYZE BUTTON ================= */
-
-    analyzeBtn.addEventListener("click", () => {
+    analyzeBtn.addEventListener("click", async () => {
 
         const file = resumeFile.files[0];
 
         if (!file) {
 
-            alert(
-                "Please select your resume first."
-            );
+            alert("Please select your resume first.");
 
             return;
         }
 
 
-        /*
-         * Temporary behavior.
-         *
-         * Actual PDF/DOCX text extraction and
-         * AI analysis will be connected in
-         * the next steps.
-         */
-
         analyzeBtn.disabled = true;
 
         analyzeBtn.innerHTML =
-            "<span>⏳</span> Preparing Resume...";
+            "<span>⏳</span> Reading Resume...";
 
 
-        setTimeout(() => {
+        try {
+
+            let text = "";
+
+            const extension =
+                file.name
+                    .split(".")
+                    .pop()
+                    .toLowerCase();
+
+
+            /* ================= PDF ================= */
+
+            if (extension === "pdf") {
+
+                text = await extractPDFText(file);
+
+            }
+
+
+            /* ================= DOCX ================= */
+
+            else if (extension === "docx") {
+
+                text = await extractDOCXText(file);
+
+            }
+
+
+            text = cleanText(text);
+
+
+            if (!text || text.length < 20) {
+
+                throw new Error(
+                    "Very little text was found in this resume."
+                );
+
+            }
+
+
+            /* ================= SAVE TEXT ================= */
+
+            sessionStorage.setItem(
+                "resumeText",
+                text
+            );
+
+            sessionStorage.setItem(
+                "resumeFileName",
+                file.name
+            );
+
+
+            analyzeBtn.innerHTML =
+                "<span>✓</span> Resume Read Successfully";
+
+
+            console.log(
+                "Resume text extracted:",
+                text
+            );
+
+            console.log(
+                "Characters:",
+                text.length
+            );
+
+
+            alert(
+                "Resume read successfully!\n\n" +
+                "Extracted characters: " +
+                text.length +
+                "\n\nThe resume is ready for AI analysis."
+            );
+
 
             analyzeBtn.disabled = false;
 
@@ -277,18 +320,108 @@ chooseResume.addEventListener("click", () => {
                 "<span>✦</span> Analyze My Resume";
 
 
-            alert(
-                "Resume uploaded successfully! " +
-                "The AI analysis engine will be connected next."
+        } catch (error) {
+
+            console.error(
+                "Resume extraction error:",
+                error
             );
 
-        }, 1000);
+            alert(
+                "Could not read this resume.\n\n" +
+                "Please make sure the PDF/DOCX contains selectable text."
+            );
+
+            analyzeBtn.disabled = false;
+
+            analyzeBtn.innerHTML =
+                "<span>✦</span> Analyze My Resume";
+
+        }
 
     });
 
 
+    /* ================= PDF EXTRACTION ================= */
+
+    async function extractPDFText(file) {
+
+        const arrayBuffer =
+            await file.arrayBuffer();
+
+        const pdf =
+            await pdfjsLib.getDocument({
+                data: arrayBuffer
+            }).promise;
+
+
+        let fullText = "";
+
+
+        for (
+            let pageNumber = 1;
+            pageNumber <= pdf.numPages;
+            pageNumber++
+        ) {
+
+            const page =
+                await pdf.getPage(pageNumber);
+
+            const textContent =
+                await page.getTextContent();
+
+
+            const pageText =
+                textContent.items
+                    .map(item => item.str)
+                    .join(" ");
+
+
+            fullText +=
+                pageText + "\n";
+
+        }
+
+
+        return fullText;
+
+    }
+
+
+    /* ================= DOCX EXTRACTION ================= */
+
+    async function extractDOCXText(file) {
+
+        const arrayBuffer =
+            await file.arrayBuffer();
+
+
+        const result =
+            await mammoth.extractRawText({
+                arrayBuffer: arrayBuffer
+            });
+
+
+        return result.value;
+
+    }
+
+
+    /* ================= CLEAN TEXT ================= */
+
+    function cleanText(text) {
+
+        return text
+            .replace(/\r/g, "")
+            .replace(/[ \t]+/g, " ")
+            .replace(/\n{3,}/g, "\n\n")
+            .trim();
+
+    }
+
+
     console.log(
-        "ResumeAI Analyzer loaded successfully!"
+        "ResumeAI Analyzer Stage 3 loaded successfully!"
     );
 
 });
