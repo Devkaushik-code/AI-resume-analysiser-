@@ -309,19 +309,7 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-            alert(
-                "Resume read successfully!\n\n" +
-                "Extracted characters: " +
-                text.length +
-                "\n\nThe resume is ready for AI analysis."
-            );
-
-
-            analyzeBtn.disabled = false;
-
-            analyzeBtn.innerHTML =
-                "<span>✦</span> Analyze My Resume";
-
+            window.location.href = "results.html";
 
         } catch (error) {
 
