@@ -590,3 +590,138 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 });
+// ==================================================
+// GEMINI AI ANALYSIS
+// ==================================================
+
+async function runGeminiAnalysis() {
+
+    const aiSummary = document.getElementById("aiSummary");
+    const aiStrengths = document.getElementById("aiStrengths");
+    const aiWeaknesses = document.getElementById("aiWeaknesses");
+    const aiSkills = document.getElementById("aiSkills");
+    const aiStatus = document.getElementById("aiStatus");
+
+    if (!aiSummary || !aiStrengths || !aiWeaknesses || !aiSkills) {
+        return;
+    }
+
+    const resumeText = sessionStorage.getItem("resumeText");
+
+    if (!resumeText) {
+        aiStatus.innerHTML = "<span>⚠️</span> Resume data not found.";
+        return;
+    }
+
+    aiStatus.innerHTML =
+        "<span>✦</span> Gemini AI is analyzing your resume...";
+
+    aiSummary.textContent = "Analyzing your resume...";
+    aiStrengths.innerHTML =
+        "<li>AI is identifying your strongest points...</li>";
+
+    aiWeaknesses.innerHTML =
+        "<li>AI is checking areas for improvement...</li>";
+
+    aiSkills.innerHTML = `
+        <span class="keyword-tag">
+            AI is generating recommendations...
+        </span>
+    `;
+
+    try {
+
+        const response = await fetch(
+            "YOUR_RENDER_URL/api/analyze",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    resumeText: resumeText
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(
+                result.message || "AI analysis failed."
+            );
+        }
+
+        const data = result.data;
+
+        aiSummary.textContent =
+            data.summary || "No summary available.";
+
+        aiStrengths.innerHTML = "";
+
+        if (
+            Array.isArray(data.strengths) &&
+            data.strengths.length
+        ) {
+            data.strengths.forEach(strength => {
+
+                const li =
+                    document.createElement("li");
+
+                li.textContent = strength;
+
+                aiStrengths.appendChild(li);
+            });
+        }
+
+        aiWeaknesses.innerHTML = "";
+
+        if (
+            Array.isArray(data.weaknesses) &&
+            data.weaknesses.length
+        ) {
+            data.weaknesses.forEach(weakness => {
+
+                const li =
+                    document.createElement("li");
+
+                li.textContent = weakness;
+
+                aiWeaknesses.appendChild(li);
+            });
+        }
+
+        aiSkills.innerHTML = "";
+
+        if (
+            Array.isArray(data.recommendedSkills) &&
+            data.recommendedSkills.length
+        ) {
+            data.recommendedSkills.forEach(skill => {
+
+                const span =
+                    document.createElement("span");
+
+                span.className = "keyword-tag";
+                span.textContent = skill;
+
+                aiSkills.appendChild(span);
+            });
+        }
+
+        aiStatus.innerHTML =
+            "<span>✓</span> Gemini AI analysis completed successfully.";
+
+    } catch (error) {
+
+        console.error("Gemini AI error:", error);
+
+        aiStatus.innerHTML =
+            "<span>⚠️</span> Unable to complete AI analysis. Make sure the backend is running.";
+
+        aiSummary.textContent =
+            "AI analysis could not be completed.";
+    }
+}
+
+runGeminiAnalysis();
