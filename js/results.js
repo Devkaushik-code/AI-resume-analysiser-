@@ -718,6 +718,6 @@ async function runGeminiAnalysis() {
     aiSummary.textContent =
         "AI analysis could not be completed.";
 }
-}
+
 
 runGeminiAnalysis();
