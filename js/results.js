@@ -713,14 +713,14 @@ async function runGeminiAnalysis() {
     `<span>⚠️</span> AI analysis failed: ${error.message}`;
     } catch (error) {
 
-        console.error("Gemini AI error:", error);
+    console.error("Gemini AI error:", error);
 
-        aiStatus.innerHTML =
-            "<span>⚠️</span> Unable to complete AI analysis. Make sure the backend is running.";
+    aiStatus.innerHTML =
+        `<span>⚠️</span> AI analysis failed: ${error.message}`;
 
-        aiSummary.textContent =
-            "AI analysis could not be completed.";
-    }
+    aiSummary.textContent =
+        "AI analysis could not be completed.";
+}
 }
 
 runGeminiAnalysis();
