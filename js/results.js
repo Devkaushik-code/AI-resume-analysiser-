@@ -632,7 +632,7 @@ async function runGeminiAnalysis() {
     try {
 
         const response = await fetch(
-            "https://ai-resume-analysiser.onrender.com",
+            "https://ai-resume-analysiser.onrender.com/api/analyze",
             {
                 method: "POST",
                 headers: {
