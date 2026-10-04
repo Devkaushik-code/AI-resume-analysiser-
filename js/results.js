@@ -691,7 +691,7 @@ async function runGeminiAnalysis() {
             });
         }
 
-        aiSkills.innerHTML = "";
+                aiSkills.innerHTML = "";
 
         if (
             Array.isArray(data.recommendedSkills) &&
@@ -707,17 +707,18 @@ async function runGeminiAnalysis() {
 
                 aiSkills.appendChild(span);
             });
-           }
-        } catch (error) {
+        }
 
-    console.error("Gemini AI error:", error);
+    } catch (error) {
 
-    aiStatus.innerHTML =
-        `<span>⚠️</span> AI analysis failed: ${error.message}`;
+        console.error("Gemini AI error:", error);
 
-    aiSummary.textContent =
-        "AI analysis could not be completed.";
+        aiStatus.innerHTML =
+            `<span>⚠️</span> AI analysis failed: ${error.message}`;
+
+        aiSummary.textContent =
+            "AI analysis could not be completed.";
+    }
 }
-
 
 runGeminiAnalysis();
