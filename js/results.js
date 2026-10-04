@@ -707,9 +707,7 @@ async function runGeminiAnalysis() {
 
                 aiSkills.appendChild(span);
             });
-        }
-
-        catch (error) {
+        } catch (error) {
 
     console.error("Gemini AI error:", error);
 
