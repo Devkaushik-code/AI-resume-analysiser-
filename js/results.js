@@ -709,9 +709,7 @@ async function runGeminiAnalysis() {
             });
         }
 
-        aiStatus.innerHTML =
-    `<span>⚠️</span> AI analysis failed: ${error.message}`;
-    } catch (error) {
+        catch (error) {
 
     console.error("Gemini AI error:", error);
 
